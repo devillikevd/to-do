@@ -72,8 +72,8 @@ The app includes built-in demo users for quick access:
 
 | Username | Password | Display Name |
 |----------|----------|--------------|
-| user1 | pass1 | Alex Johnson |
-| user2 | pass2 | Sam Rivera |
+| user1 | pass1 | Abhi |
+| user2 | pass2 | Roohi |
 
 ## 🌐 Deployment
 

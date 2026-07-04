@@ -1,73 +1,110 @@
-# ProTrack — Advanced To-Do + Fitness Tracker
+# ProTrack — Advanced Productivity & Fitness Command Center
 
-A fully functional, production-quality single-page web application built with pure HTML, CSS, and Vanilla JavaScript.
+ProTrack is a highly polished, single-page web application that combines task management, personal productivity workflows, and fitness tracking into one elegant dashboard. Built with pure HTML, CSS, and Vanilla JavaScript, it delivers a premium user experience without the overhead of a framework.
 
-## 🚀 Features
+## ✨ What Makes ProTrack Advanced
 
-### Authentication
-- 2 hardcoded users: `user1/pass1` and `user2/pass2`
-- Session persists via localStorage across page refreshes
-- Separate data namespaces for each user
+ProTrack is designed as a complete digital operating system for daily life. It goes beyond a basic to-do app by combining:
 
-### To-Do List
-- Add / Edit / Delete tasks with full details
-- Priority levels (High/Medium/Low) — color-coded
-- Kanban board (Pending → In Progress → Completed) with drag & drop
-- Filter & Sort by priority, category, status, due date
-- Search bar
-- Subtasks/checklist inside tasks
-- Recurring tasks (daily/weekly)
-- Overdue task highlighting
-- Progress tracking
+- Intelligent task planning with status-based workflow management
+- Fitness tracking with streak analysis and progress visualization
+- Smart reports for weekly and monthly performance review
+- A modern, responsive UI with dark/light theme support
+- Local-first persistence with backup and restore capabilities
 
-### Fitness Tracker
-- Log daily steps, workout minutes, type, notes
-- Goal setup (step goal + workout goal)
-- Daily vs yesterday comparison with trend indicators
-- Streak counters (step streak + workout streak)
-- 14-day line/bar charts (Chart.js)
-- Full activity history table
+## 🚀 Core Features
 
-### Reports
-- **Weekly Report**: This week vs last week comparison, best/worst day, goal achievement rate
-- **Monthly Report**: Full month breakdown with charts
+### Productivity Engine
+- Create, edit, delete, and organize tasks with rich details
+- Assign priority levels: High, Medium, and Low
+- Move tasks across a Kanban-style workflow: Pending → In Progress → Completed
+- Search, filter, and sort tasks dynamically
+- Track due dates and highlight overdue work
+- Add subtasks and recurring tasks for repeatable routines
+- Monitor task progress from the dashboard in real time
 
-### Dashboard
-- Quick stats cards
-- Goal progress bars
-- Activity heatmap (GitHub-style, last 12 weeks)
-- Motivational daily quote
+### Fitness Intelligence
+- Log steps, workout minutes, workout type, and notes
+- Configure step and workout goals per user
+- Compare today vs. yesterday with visual trend indicators
+- Track streaks for fitness consistency
+- Review activity with interactive charts and historical data
+- Explore a full activity timeline with detailed records
 
-### Settings
+### Insightful Reporting
+- Weekly performance summaries with progress comparison
+- Monthly reports with structured breakdowns
+- Goal completion visibility across productivity and fitness metrics
+- Visual analytics to uncover patterns and momentum
+
+### Premium Dashboard Experience
+- Quick stats cards for immediate overview
+- Goal progress bars for tasks, steps, and workouts
+- An activity heatmap for weekly consistency tracking
+- Motivational daily quotes and a polished user interface
+- Responsive navigation tailored for desktop and mobile experiences
+
+### Personalization & Control
 - Custom task categories
-- Daily goal configuration
-- Export/Import JSON backup
-- Browser notifications
+- Theme switching between dark and light mode
+- Export/import JSON backups for data safety
+- Browser notifications for task awareness
+- Persistent session support with user-specific data isolation
 
 ## 🛠️ Tech Stack
-- HTML5, CSS3, Vanilla JavaScript (ES6+)
-- Chart.js (CDN) for data visualization
-- Font Awesome (CDN) for icons
-- localStorage for all data persistence
 
-## 📦 Deployment
+- HTML5 for structure
+- CSS3 for modern visual design and responsive layout
+- Vanilla JavaScript (ES6+) for app logic and interactivity
+- Chart.js for analytics visualizations
+- Font Awesome for icons
+- localStorage for browser-based persistence
 
-Deploy as a static site on **Vercel**, Netlify, or GitHub Pages:
+## 📁 Project Structure
+
+- index.html — app layout, tabs, modals, and UI structure
+- style.css — complete visual system, responsive design, and animations
+- script.js — app state, authentication, task logic, fitness logic, charts, and reports
+
+## 👤 Demo Accounts
+
+The app includes built-in demo users for quick access:
+
+| Username | Password | Display Name |
+|----------|----------|--------------|
+| user1 | pass1 | Alex Johnson |
+| user2 | pass2 | Sam Rivera |
+
+## 🌐 Deployment
+
+ProTrack is a static web app and can be deployed easily on:
+
+- Vercel
+- Netlify
+- GitHub Pages
+
+### Quick Deploy
+Upload these files to your hosting platform:
 
 ```bash
-# Just upload the 3 files:
 index.html
 style.css
 script.js
 ```
 
-No build step, no dependencies to install.
+No build step is required.
 
-## ⚠️ Data Note
-localStorage is browser/device-specific. Use **Export Data** regularly to backup your data.
+## 🔐 Data Note
 
-## 👤 Default Users
-| Username | Password | Display Name |
-|----------|----------|--------------|
-| user1 | pass1 | Alex Johnson |
-| user2 | pass2 | Sam Rivera |
+All data is stored in the browser using localStorage, which means it is device-specific. To avoid data loss, use the export feature regularly.
+
+## 🧠 Future Enhancements
+
+Possible upgrades for future versions include:
+
+- Cloud sync and multi-device support
+- Advanced recurring task automation
+- Calendar integration
+- AI-based productivity suggestions
+- Offline-first enhancements
+

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProTrack — To-Do & Fitness Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ========== LOGIN SCREEN ========== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <i class="fa-solid fa-bolt"></i>
+      <span>ProTrack</span>
+    </div>
+    <p class="login-subtitle">Your All-in-One Productivity & Fitness Hub</p>
+    <form id="loginForm" autocomplete="off">
+      <div class="input-group">
+        <label><i class="fa-solid fa-user"></i> Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter username" required />
+      </div>
+      <div class="input-group">
+        <label><i class="fa-solid fa-lock"></i> Password</label>
+        <div style="position:relative;">
+          <input type="password" id="loginPassword" placeholder="Enter password" required />
+          <span class="pw-toggle" onclick="togglePw()"><i class="fa-solid fa-eye" id="pwEyeIcon"></i></span>
+        </div>
+      </div>
+      <div id="loginError" class="login-error hidden">Invalid username or password.</div>
+      <button type="submit" class="btn-login">Sign In <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="login-hint">
+      <i class="fa-solid fa-circle-info"></i>
+      Demo — user1 / pass1 &nbsp;|&nbsp; user2 / pass2
+    </div>
+  </div>
+  <div class="login-bg-shapes">
+    <div class="shape s1"></div><div class="shape s2"></div><div class="shape s3"></div>
+  </div>
+</div>
+
+<!-- ========== MAIN APP ========== -->
+<div id="mainApp" class="app hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo"><i class="fa-solid fa-bolt"></i> <span class="logo-text">ProTrack</span></div>
+      <button class="sidebar-close" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="user-info-sidebar">
+      <div class="user-avatar-lg" id="sidebarAvatar">U</div>
+      <div>
+        <div class="user-name-lg" id="sidebarUserName">User</div>
+        <div class="user-role">Member</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
+        <i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-tab="todo" onclick="switchTab('todo')">
+        <i class="fa-solid fa-list-check"></i> <span>To-Do List</span>
+        <span class="nav-badge" id="todoBadge">0</span>
+      </a>
+      <a class="nav-item" data-tab="fitness" onclick="switchTab('fitness')">
+        <i class="fa-solid fa-fire-flame-curved"></i> <span>Fitness Tracker</span>
+      </a>
+      <a class="nav-item" data-tab="weekly" onclick="switchTab('weekly')">
+        <i class="fa-solid fa-chart-line"></i> <span>Weekly Report</span>
+      </a>
+      <a class="nav-item" data-tab="monthly" onclick="switchTab('monthly')">
+        <i class="fa-solid fa-calendar-days"></i> <span>Monthly Report</span>
+      </a>
+      <a class="nav-item" data-tab="settings" onclick="switchTab('settings')">
+        <i class="fa-solid fa-gear"></i> <span>Settings</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-toggle-btn" onclick="toggleTheme()">
+        <i class="fa-solid fa-moon" id="themeIcon"></i> <span id="themeText">Light Mode</span>
+      </button>
+      <button class="logout-btn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content" id="mainContent">
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <div class="page-title" id="pageTitle">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="quote-ticker" id="quoteTicker"></div>
+        <div class="topbar-user">
+          <div class="user-avatar" id="topbarAvatar">U</div>
+          <span id="topbarUserName">User</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ====== DASHBOARD TAB ====== -->
+    <div class="tab-content active" id="tab-dashboard">
+      <div class="section-title">Good <span id="greetingTime"></span>, <span id="greetingName"></span>! 👋</div>
+      <div class="motivational-quote-card" id="motivationalQuote"></div>
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="dashTotalTasks">0</div>
+            <div class="stat-label">Total Tasks</div>
+          </div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="dashCompletedTasks">0</div>
+            <div class="stat-label">Completed Today</div>
+          </div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon"><i class="fa-solid fa-person-walking"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="dashSteps">—</div>
+            <div class="stat-label">Steps Today</div>
+          </div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-icon"><i class="fa-solid fa-dumbbell"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="dashWorkout">—</div>
+            <div class="stat-label">Workout (min)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="dash-row">
+        <div class="card half-card">
+          <div class="card-header"><i class="fa-solid fa-bullseye"></i> Today's Goal Progress</div>
+          <div class="progress-section">
+            <div class="progress-label"><span>Steps</span><span id="dashStepsProgress">0 / 0</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar blue" id="dashStepsBar" style="width:0%"></div></div>
+            <div class="progress-label mt"><span>Workout</span><span id="dashWorkoutProgress">0 / 0 min</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar purple" id="dashWorkoutBar" style="width:0%"></div></div>
+            <div class="progress-label mt"><span>Tasks</span><span id="dashTasksProgress">0 / 0</span></div>
+            <div class="progress-bar-wrap"><div class="progress-bar green" id="dashTasksBar" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="card half-card">
+          <div class="card-header"><i class="fa-solid fa-fire"></i> Streaks & Trends</div>
+          <div class="streak-section">
+            <div class="streak-item">
+              <div class="streak-num" id="dashStepStreak">0</div>
+              <div class="streak-lbl">Step Goal Streak 🔥</div>
+            </div>
+            <div class="streak-item">
+              <div class="streak-num" id="dashWorkoutStreak">0</div>
+              <div class="streak-lbl">Workout Streak 💪</div>
+            </div>
+            <div class="trend-row">
+              <div class="trend-item" id="dashStepTrend">
+                <span class="trend-icon">➖</span> Steps: Same as yesterday
+              </div>
+              <div class="trend-item" id="dashWorkoutTrend">
+                <span class="trend-icon">➖</span> Workout: Same as yesterday
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's Tasks & Fitness Overview -->
+      <div class="dash-row">
+        <div class="card flex-1">
+          <div class="card-header"><i class="fa-solid fa-clock"></i> Today's Pending Tasks</div>
+          <div id="dashPendingTasks" class="dash-task-list">
+            <div class="empty-state"><i class="fa-regular fa-face-smile"></i> No pending tasks!</div>
+          </div>
+        </div>
+        <div class="card flex-1">
+          <div class="card-header"><i class="fa-solid fa-chart-simple"></i> 7-Day Step Overview</div>
+          <canvas id="dashStepsChart" height="180"></canvas>
+        </div>
+      </div>
+
+      <!-- Heatmap Calendar -->
+      <div class="card">
+        <div class="card-header"><i class="fa-solid fa-calendar-days"></i> Activity Heatmap (Last 12 Weeks)</div>
+        <div id="heatmapContainer" class="heatmap-container"></div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <div class="heatmap-cell lv0"></div>
+          <div class="heatmap-cell lv1"></div>
+          <div class="heatmap-cell lv2"></div>
+          <div class="heatmap-cell lv3"></div>
+          <div class="heatmap-cell lv4"></div>
+          <span>More</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== TO-DO TAB ====== -->
+    <div class="tab-content hidden" id="tab-todo">
+      <div class="section-title">Task Manager</div>
+
+      <!-- Controls Row -->
+      <div class="todo-controls">
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="taskSearch" placeholder="Search tasks..." oninput="filterTasks()" />
+        </div>
+        <div class="filter-row">
+          <select id="filterStatus" onchange="filterTasks()">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <select id="filterPriority" onchange="filterTasks()">
+            <option value="">All Priority</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <select id="filterCategory" onchange="filterTasks()">
+            <option value="">All Categories</option>
+          </select>
+          <select id="sortTasks" onchange="filterTasks()">
+            <option value="created">Sort: Newest</option>
+            <option value="dueDate">Sort: Due Date</option>
+            <option value="priority">Sort: Priority</option>
+            <option value="status">Sort: Status</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="openTaskModal()">
+          <i class="fa-solid fa-plus"></i> Add Task
+        </button>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="task-progress-wrap">
+        <div class="task-progress-label">
+          <span>Overall Progress</span>
+          <span id="taskProgressText">0%</span>
+        </div>
+        <div class="progress-bar-wrap lg">
+          <div class="progress-bar green" id="taskProgressBar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Task Columns (Kanban-style) -->
+      <div class="kanban-board" id="kanbanBoard">
+        <div class="kanban-col" id="col-Pending" ondragover="allowDrop(event)" ondrop="dropTask(event,'Pending')">
+          <div class="kanban-col-header pending-header"><i class="fa-solid fa-circle-dot"></i> Pending <span class="col-count" id="count-Pending">0</span></div>
+          <div class="kanban-tasks" id="tasks-Pending"></div>
+        </div>
+        <div class="kanban-col" id="col-In Progress" ondragover="allowDrop(event)" ondrop="dropTask(event,'In Progress')">
+          <div class="kanban-col-header inprogress-header"><i class="fa-solid fa-spinner"></i> In Progress <span class="col-count" id="count-In Progress">0</span></div>
+          <div class="kanban-tasks" id="tasks-In Progress"></div>
+        </div>
+        <div class="kanban-col" id="col-Completed" ondragover="allowDrop(event)" ondrop="dropTask(event,'Completed')">
+          <div class="kanban-col-header completed-header"><i class="fa-solid fa-circle-check"></i> Completed <span class="col-count" id="count-Completed">0</span></div>
+          <div class="kanban-tasks" id="tasks-Completed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== FITNESS TAB ====== -->
+    <div class="tab-content hidden" id="tab-fitness">
+      <div class="section-title">Fitness Tracker</div>
+
+      <div class="fitness-layout">
+        <!-- Log Entry -->
+        <div class="card fitness-log-card">
+          <div class="card-header"><i class="fa-solid fa-plus-circle"></i> Log Activity</div>
+          <form id="fitnessForm">
+            <div class="input-group">
+              <label><i class="fa-solid fa-calendar"></i> Date</label>
+              <input type="date" id="fitnessDate" />
+            </div>
+            <div class="input-group">
+              <label><i class="fa-solid fa-person-walking"></i> Steps Walked</label>
+              <input type="number" id="fitnessSteps" placeholder="e.g. 8500" min="0" />
+            </div>
+            <div class="input-group">
+              <label><i class="fa-solid fa-clock"></i> Workout Duration (min)</label>
+              <input type="number" id="fitnessWorkout" placeholder="e.g. 45" min="0" />
+            </div>
+            <div class="input-group">
+              <label><i class="fa-solid fa-dumbbell"></i> Workout Type</label>
+              <select id="fitnessType">
+                <option value="">Select Type</option>
+                <option>Cardio</option>
+                <option>Strength</option>
+                <option>Yoga</option>
+                <option>Running</option>
+                <option>Cycling</option>
+                <option>Swimming</option>
+                <option>HIIT</option>
+                <option>Walking</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label><i class="fa-solid fa-note-sticky"></i> Notes (optional)</label>
+              <textarea id="fitnessNotes" placeholder="How did it feel?" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn-primary w-full">
+              <i class="fa-solid fa-floppy-disk"></i> Save Entry
+            </button>
+          </form>
+        </div>
+
+        <!-- Today's Analysis -->
+        <div class="fitness-analysis">
+          <div class="card">
+            <div class="card-header"><i class="fa-solid fa-chart-pie"></i> Today's Analysis</div>
+            <div class="analysis-grid" id="fitnessAnalysis">
+              <div class="analysis-item">
+                <div class="ring-wrap">
+                  <canvas id="stepsRing" width="100" height="100"></canvas>
+                  <div class="ring-label" id="stepsRingLabel">0%</div>
+                </div>
+                <div class="analysis-label">Steps Goal</div>
+                <div class="analysis-val" id="stepsAnalysisVal">0 / 0</div>
+              </div>
+              <div class="analysis-item">
+                <div class="ring-wrap">
+                  <canvas id="workoutRing" width="100" height="100"></canvas>
+                  <div class="ring-label" id="workoutRingLabel">0%</div>
+                </div>
+                <div class="analysis-label">Workout Goal</div>
+                <div class="analysis-val" id="workoutAnalysisVal">0 / 0 min</div>
+              </div>
+            </div>
+            <!-- Comparison -->
+            <div class="comparison-section" id="comparisonSection">
+              <div class="comp-title">vs Yesterday</div>
+              <div class="comp-row" id="compSteps">
+                <i class="fa-solid fa-person-walking"></i> Steps: <span>—</span>
+              </div>
+              <div class="comp-row" id="compWorkout">
+                <i class="fa-solid fa-dumbbell"></i> Workout: <span>—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><i class="fa-solid fa-chart-line"></i> Steps (Last 14 Days)</div>
+            <canvas id="fitnessStepsChart" height="200"></canvas>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><i class="fa-solid fa-chart-column"></i> Workout Minutes (Last 14 Days)</div>
+            <canvas id="fitnessWorkoutChart" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- History Table -->
+      <div class="card mt">
+        <div class="card-header"><i class="fa-solid fa-table-list"></i> Activity History</div>
+        <div class="table-wrap">
+          <table class="data-table" id="fitnessHistoryTable">
+            <thead>
+              <tr>
+                <th>Date</th><th>Steps</th><th>Workout (min)</th><th>Type</th><th>Notes</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fitnessHistoryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== WEEKLY REPORT TAB ====== -->
+    <div class="tab-content hidden" id="tab-weekly">
+      <div class="section-title">Weekly Report</div>
+      <div id="weeklyReportContent"></div>
+    </div>
+
+    <!-- ====== MONTHLY REPORT TAB ====== -->
+    <div class="tab-content hidden" id="tab-monthly">
+      <div class="section-title">Monthly Report</div>
+      <div id="monthlyReportContent"></div>
+    </div>
+
+    <!-- ====== SETTINGS TAB ====== -->
+    <div class="tab-content hidden" id="tab-settings">
+      <div class="section-title">Settings</div>
+
+      <div class="settings-grid">
+        <!-- Goals -->
+        <div class="card">
+          <div class="card-header"><i class="fa-solid fa-bullseye"></i> Daily Goals</div>
+          <div class="input-group">
+            <label>Daily Step Goal</label>
+            <input type="number" id="goalSteps" placeholder="e.g. 10000" />
+          </div>
+          <div class="input-group">
+            <label>Daily Workout Goal (minutes)</label>
+            <input type="number" id="goalWorkout" placeholder="e.g. 45" />
+          </div>
+          <button class="btn-primary" onclick="saveGoals()"><i class="fa-solid fa-floppy-disk"></i> Save Goals</button>
+        </div>
+
+        <!-- Categories -->
+        <div class="card">
+          <div class="card-header"><i class="fa-solid fa-tags"></i> Custom Task Categories</div>
+          <div id="categoryList" class="category-list"></div>
+          <div class="input-row">
+            <input type="text" id="newCategoryInput" placeholder="New category name..." />
+            <button class="btn-primary" onclick="addCategory()"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+
+        <!-- Backup / Restore -->
+        <div class="card">
+          <div class="card-header"><i class="fa-solid fa-database"></i> Data Backup & Restore</div>
+          <div class="backup-info">
+            <i class="fa-solid fa-circle-info"></i>
+            <small>localStorage stores data only in this browser. Export regularly to prevent data loss when switching devices or clearing browser data.</small>
+          </div>
+          <div class="backup-buttons">
+            <button class="btn-secondary" onclick="exportData()"><i class="fa-solid fa-download"></i> Export JSON Backup</button>
+            <label class="btn-secondary btn-import">
+              <i class="fa-solid fa-upload"></i> Import JSON
+              <input type="file" id="importFile" accept=".json" onchange="importData(event)" hidden />
+            </label>
+          </div>
+        </div>
+
+        <!-- Notification -->
+        <div class="card">
+          <div class="card-header"><i class="fa-solid fa-bell"></i> Browser Notifications</div>
+          <p style="font-size:0.85rem;opacity:0.7;margin-bottom:1rem;">Enable reminders for pending tasks and fitness goals.</p>
+          <button class="btn-secondary" onclick="requestNotificationPermission()">
+            <i class="fa-solid fa-bell"></i> Enable Notifications
+          </button>
+          <div id="notifStatus" style="margin-top:0.5rem;font-size:0.8rem;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main-content -->
+</div><!-- end mainApp -->
+
+<!-- ====== TASK MODAL ====== -->
+<div class="modal-overlay hidden" id="taskModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modalTitle">Add Task</span>
+      <button onclick="closeTaskModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="taskId" />
+      <div class="input-group">
+        <label>Title *</label>
+        <input type="text" id="taskTitle" placeholder="Task title..." required />
+      </div>
+      <div class="input-group">
+        <label>Description</label>
+        <textarea id="taskDesc" placeholder="Description..." rows="2"></textarea>
+      </div>
+      <div class="modal-row">
+        <div class="input-group flex-1">
+          <label>Category</label>
+          <select id="taskCategory"></select>
+        </div>
+        <div class="input-group flex-1">
+          <label>Priority</label>
+          <select id="taskPriority">
+            <option value="High">🔴 High</option>
+            <option value="Medium" selected>🟡 Medium</option>
+            <option value="Low">🟢 Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="input-group flex-1">
+          <label>Due Date & Time</label>
+          <input type="datetime-local" id="taskDueDate" />
+        </div>
+        <div class="input-group flex-1">
+          <label>Status</label>
+          <select id="taskStatus">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="input-group flex-1">
+          <label>Recurring</label>
+          <select id="taskRecurring">
+            <option value="none">None</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      <!-- Subtasks -->
+      <div class="input-group">
+        <label>Subtasks / Checklist</label>
+        <div id="subtaskList"></div>
+        <div class="input-row">
+          <input type="text" id="subtaskInput" placeholder="Add subtask..." />
+          <button type="button" class="btn-primary" onclick="addSubtask()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeTaskModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveTask()"><i class="fa-solid fa-floppy-disk"></i> Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TOAST ====== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- OVERLAY for sidebar on mobile -->
+<div class="sidebar-overlay hidden" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
